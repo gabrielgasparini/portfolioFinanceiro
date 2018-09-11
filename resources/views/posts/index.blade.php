@@ -34,10 +34,10 @@
                 
                 <td><a href="{{action('PostController@edit', $post['id'])}}" class="btn btn-warning">Edit</a></td>
                 <td>
-                  <form action="{{action('PostController@destroy', $post['id'])}}" method="post">
+                  <form action="{{action('PostController@destroy', $post['id'])}}" method="post" class="delete-form">
                     @csrf
                     <input name="_method" type="hidden" value="DELETE">
-                    <button class="btn btn-danger" type="submit">Delete</button>
+                    <button class="btn btn-danger delete-botton" type="submit" >Delete</button>
                   </form>
                 </td>
               </tr>
