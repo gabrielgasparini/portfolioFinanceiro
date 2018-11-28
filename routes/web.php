@@ -21,8 +21,9 @@ Route::get('master', function () {
 
 /* -------------------- */
 
-Route::resource('posts', 'PostController');
+Route::resource('investimentos', 'InvestimentoController');
 
+Route::get('/investimentos/{id}/projecao', 'ProjecaoController@index');
 
 /* -------------------- */
 

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 
-class PostController extends Controller
+class InvestimentoController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -23,8 +24,8 @@ class PostController extends Controller
     */
     public function index()
     {
-        $posts=\App\Post::all();
-        return view('posts.index',compact('posts'));
+        $investimentos=\App\Post::all()->where('usuario_id', Auth::user()->id);
+        return view('investimentos.index',compact('investimentos'));
     }
     
     /**
@@ -34,7 +35,7 @@ class PostController extends Controller
     */
     public function create()
     {
-        return view('posts.create');
+        return view('investimentos.create');
     }
     
     /**
@@ -51,12 +52,15 @@ class PostController extends Controller
             $name=time().$file->getClientOriginalName();
             $file->move(public_path().'/images/', $name);
         }
-        $post= new \App\Post;
-        $post->titulo=$request->get('titulo');
-        $post->texto=$request->get('texto');
-        $post->save();
+        $investimento= new \App\Post;
+        $investimento->titulo=$request->get('titulo');
+        $investimento->usuario_id=Auth::user()->id;
+        $investimento->deposito_inicial=$request->get('deposito_inicial');
+        $investimento->deposito_mensal=$request->get('deposito_mensal');
+        $investimento->tempo=$request->get('tempo');
+        $investimento->save();
         
-        return redirect('posts/create')->with('success', 'Investimento cadastrado com sucesso!');
+        return redirect('investimentos')->with('success', 'Investimento cadastrado com sucesso!');
     }
     
     /**
@@ -78,8 +82,8 @@ class PostController extends Controller
     */
     public function edit($id)
     {
-        $post = \App\Post::find($id);
-        return view('posts.edit',compact('post', 'id'));
+        $investimento = \App\Post::find($id);
+        return view('investimentos.edit',compact('investimento', 'id'));
     }
     
     /**
@@ -91,11 +95,13 @@ class PostController extends Controller
     */
     public function update(Request $request, $id)
     {
-        $post = \App\Post::find($id);
-        $post->titulo=$request->get('titulo');
-        $post->texto=$request->get('texto');
-        $post->save();
-        return redirect('posts')->with('success', 'Investimento atualizado com sucesso!');
+        $investimento = \App\Post::find($id);
+        $investimento->titulo=$request->get('titulo');
+        $investimento->deposito_inicial=$request->get('deposito_inicial');
+        $investimento->deposito_mensal=$request->get('deposito_mensal');
+        $investimento->tempo=$request->get('tempo');
+        $investimento->save();
+        return redirect('investimentos')->with('success', 'Investimento atualizado com sucesso!');
     }
     
     /**
@@ -106,8 +112,8 @@ class PostController extends Controller
     */
     public function destroy($id)
     {
-        $post = \App\Post::find($id);
-        $post->delete();
-        return redirect('posts')->with('success','Investimento deletado com sucesso!');
+        $investimento = \App\Post::find($id);
+        $investimento->delete();
+        return redirect('investimentos')->with('success','Investimento deletado com sucesso!');
     }
 }
